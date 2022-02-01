@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page</title>
+</head>
+<body>
+    Counter: <span id="counter"></span>
+
+    <script>
+        setInterval(getDataNew, 5000);
+
+
+        function getData() {
+            const xhttp = new XMLHttpRequest();
+            // The onload function is called when a response is coming from the server
+            xhttp.onload = function() {
+                let jsObj = JSON.parse(this.responseText);
+
+                document.getElementById("counter").innerHTML = jsObj.counter;
+            }
+
+            xhttp.open("GET", "http://127.0.0.1:5000/data", true);
+            xhttp.send();
+        }
+/*
+        function parseJson(responseData) {
+            return responseData.json();
+        }
+
+        function displayData(jsObj) {
+            document.getElementById("counter").innerHTML = jsObj.counter;
+        }
+*/
+        function getDataNew() {
+            fetch("http://127.0.0.1:5000/data")
+                .then(responseData => responseData.json())
+                .then(jsObj => document.getElementById("counter").innerHTML = jsObj.counter);
+                //.then(parseJson)
+                //.then(displayData);
+        }
+
+    </script>
+
+</body>
+</html>

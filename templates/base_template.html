@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Site</title>
+    <style>
+        .menu {
+            width: 100%;
+            height: 50px;
+            background: cadetblue;
+        }
+
+        .message {
+            height: 25px;
+            width: 25px;
+            border-radius: 50%;
+            text-align: center;
+        }
+
+        .red {
+            background: red;
+        }
+
+        .green {
+            background: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <a href="/">Home</a>
+        <a href="/contact">Contact</a>
+        <a href="/about">About</a>
+        <div id="message-icon" class="message red"></div>
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
+    <script>
+        checkMessage();
+        setInterval(checkMessage, 5000);
+
+        function checkMessage() {
+            fetch("http://127.0.0.1:5000/check_message")
+                .then(response => response.json())
+                .then(msgObj => {
+                    let msgIcon = document.getElementById("message-icon");
+                    if(msgObj.numNewMessages === 0) {
+                        msgIcon.classList.remove("green");
+                        msgIcon.classList.add("red");
+                    }
+                    else {
+                        msgIcon.classList.remove("red");
+                        msgIcon.classList.add("green");
+                    }
+                    msgIcon.innerHTML = msgObj.numNewMessages;
+                })
+        }
+    </script>
+
+</body>
+</html>
